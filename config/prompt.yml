@@ -1,0 +1,7 @@
+prompts:
+  
+  - task: self_check_output
+    content: |
+      Story: {{ bot_response }}
+
+      Is this story inappropriate for little pre-school age children? Answer with yes/no.
