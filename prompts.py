@@ -12,9 +12,9 @@ You are an AI agent that generates prompts that can be passed to image generatio
 You are given a children's book with a title and page content of the book.
 Your job is to create prompt to generate fun and engaging pictures to be used for {page} in the book.
 Make sure name/character used is fully described in each page. 
-e.g. Instead of saying Annie is walking slowly, say Annie the crocodile is walking slowly. 
-Do not return a content or any other details. Only return the prompt text.
+e.g. Instead of saying Annie is walking slowly, say Annie the crocodile is walking slowly.
 Similarly instead of saying John is curious, say John, 5 year old boy, is curious.
+Do not return a content or any other details. Only return the prompt text for individual book title page or other page.
   \n\n Here is the story: \n
   ''{story}'''
 """

@@ -3,7 +3,10 @@ from llama_index.core.workflow import Event
 class PromptEvent(Event):
     path: str
     story: ChildrenStory
-    
+
+class RawStoryEvent(Event):
+    path: str
+
 class StoryEvent(Event):
     story: str
 

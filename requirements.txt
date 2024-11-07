@@ -1,0 +1,7 @@
+llama-index-core
+llama-index-readers-file
+llama-index-utils-workflow
+llama-index-llms-nvidia
+nemoguardrails
+langchain-nvidia-ai-endpoints==0.2.2
+python-dotenv

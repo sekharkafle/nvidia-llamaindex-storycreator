@@ -12,6 +12,14 @@ from PIL import Image
 import fitz
 
 def generate_image(prompt:str, key:str):
+    """Generates image using StabilityAI diffusion model available as NVidia NIM API.
+
+    Args:
+        prompt: Image gen prompt
+        key: NVIDIA API Key
+    Returns:
+        Generated image in base64 format
+    """
     invoke_url = "https://ai.api.nvidia.com/v1/genai/stabilityai/stable-diffusion-3-medium"
 
     headers = {
@@ -36,8 +44,12 @@ def generate_image(prompt:str, key:str):
     return response_body['image']
 
 def base64_to_imagefile(data, file:str):
-    """Converts a base64 encoded image in JSON to an image file."""
-
+    """Decodes base64 encoded image and saves as an image file.
+    
+    Args:
+        data: Base64 image
+        file: output location to save file
+    """
     # Extract the base64 encoded image data
     base64_image = data
 
@@ -49,7 +61,11 @@ def base64_to_imagefile(data, file:str):
         image_file.write(image_bytes)
 
 def json_to_img(file:str):
+    """Decodes base64 encoded image from a json file and saves as an image file.
     
+    Args:
+        file: output location to save file
+    """
     with open(file, 'r') as f:
         # Load the JSON data 
         data = json.load(f)
@@ -57,7 +73,15 @@ def json_to_img(file:str):
         base64_to_imagefile(data['image'], img_file)
         
 def generate_image_stability(prompt:str, key:str, file:str):
+    """Generates image using StabilityAI diffusion model.
 
+    Args:
+        prompt: Image gen prompt
+        key: StabilityAI API Key
+        file: output file location
+    Returns:
+        Generated image in base64 format
+    """
     response = requests.post(
         f"https://api.stability.ai/v2beta/stable-image/generate/sd3",
         headers={
@@ -78,6 +102,15 @@ def generate_image_stability(prompt:str, key:str, file:str):
         raise Exception(str(response.json()))
 
 def add_text(c, text, width, height, is_right = False):
+    """Adds text to a given frame in the PDF page
+
+    Args:
+        c: PDF Canvas
+        text: Text to be added
+        width: width of the page
+        height: height of the page
+        is_right: flag to align the text to left or right side of the page
+    """
     # Define the box dimensions and position
     x, y, w, h = 10, 10, 0.5 * width, 0.5*height
 
@@ -102,32 +135,49 @@ def add_text(c, text, width, height, is_right = False):
         p.drawOn(c, 0.5 * width - 50, h - 50)   
 
 def create_pdf(filename, data, img_path):
-    
+    """Creates a story PDF by combining image and text to generate pages
+
+    Args:
+        filename: output file name
+        data: object of type ChildrenStory data model
+        img_path: Directory where images are stored
+    """
+    # Open the title image and get its dimensions
     title_img = f'{img_path}/title.jpg'
-    # Open the image and get its dimensions
     with Image.open(title_img) as img:
         width, height = img.size
 
-    # Create a PDF canvas
+    # Create a PDF canvas based on the title image size
     c = canvas.Canvas(filename, pagesize=(width, height))
 
-    # Draw the image on the canvas
+    # Draw the title image on the canvas
     c.drawImage(title_img, 0, 0, width, height)
-
+    # Add page break
     c.showPage()
+    #initiate with left alignment
     right_align  = False
+    #draw all pages
     for page_data in data.pages:
+        #get image and text for the page
         page_img = f"{img_path}/{page_data.page_no}.jpg"
         page_text = page_data.content
+        #draw image and text
         c.drawImage(page_img, 0, 0, width, height)
         add_text(c, page_text, width, height, right_align)
+        #alternate left and right alignment
         right_align = not right_align
         # Add page break for the next page
         c.showPage()
-
+    #save file
     c.save()
 
 def pdf_to_image(pdf_path, output_folder):
+    """Exports pdf pages to an image file
+
+    Args:
+        pdf_path: location of the pdf file
+        output_folder: location of output images
+    """
     doc = fitz.open(pdf_path)
     for page in doc:
         p = doc.load_page(page.number)

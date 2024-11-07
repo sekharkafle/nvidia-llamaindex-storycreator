@@ -8,6 +8,13 @@ if parse_version(pil.__version__)>=parse_version('10.0.0'):
     pil.ANTIALIAS=pil.LANCZOS
 
 def merge_audio_video(image_path, audio_path, video_path):
+    """Merges audio and video files and generates video clip
+
+    Args:
+        image_path: path of image file to be used for generating video
+        audio_path: path of audio file to be used for generating video
+        video_path: output video path
+    """
     image = pil.open(image_path)
     audio_clip = AudioFileClip(audio_path)
     image_clip = ImageClip(image_path, duration=audio_clip.duration)
@@ -18,7 +25,7 @@ def merge_audio_video(image_path, audio_path, video_path):
     video_clip.write_videofile(video_path, fps=24, codec="libx264",temp_audiofile="temp-audio.m4a", remove_temp=True, audio_codec="aac")
 
 def combine_videos(video_clips, output_file):
-    """Combines multiple video clips into a single movie."""
+    """Combines multiple video clips into a single movie file."""
 
     clips = [mp.VideoFileClip(clip) for clip in video_clips]
     final_clip = mp.concatenate_videoclips(clips)
@@ -26,15 +33,24 @@ def combine_videos(video_clips, output_file):
 
 
 def save_video(page_count, video_path, output_file):
+    """Aggregates multiple video clips and save as a single merged video"""
     video_files = [f'{video_path}/{i}.mp4' for i in range(page_count)]
     combine_videos(video_files, output_file)
 
 
 def save_audio(data, audio_path):
+    """Creates audio files
+
+    Args:
+        data: data with multiple texts to convert audio
+        audio_path: path of audio file to be used for generating video
+    """
+    # Create title audio file
     title = data.title
     ff = f"{audio_path}/title.mp3"
     tts = gTTS(title, lang='en')
     tts.save(ff)
+    # Create page audio file
     for page_data in data.pages:
         ff = f"{audio_path}/{page_data.page_no}.mp3"
         page_text = page_data.content.replace("'","")
@@ -42,6 +58,14 @@ def save_audio(data, audio_path):
         tts.save(ff)
 
 def save_audio_video(data, image_path, audio_path, video_path):
+    """Merges image and audio to create video files
+
+    Args:
+        data: data with multiple page data
+        image_path: image file directory
+        audio_path: audio file directory
+        video_path: output video path
+    """
     title = data.title
     a_p = f"{audio_path}/title.mp3"
     i_p = f"{image_path}/0.png"
