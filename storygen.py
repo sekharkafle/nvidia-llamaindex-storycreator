@@ -120,8 +120,8 @@ class ChildrenStoryGenerationWorkflow(Workflow):
     @step #(retry_policy=ConstantDelayRetryPolicy(delay=5, maximum_attempts=20))
     async def generate_prompt(self, ev: ChildrenStoryEvent) -> PromptEvent|StopEvent:
         story = ev.story
-        template = PromptTemplate(STORY_GENERATE_IMAGE_PROMPT)
-        prompt = template.format(page = " title ", story=get_full_story_with_title(story))
+        template = PromptTemplate(STORY_TITLE_GENERATE_IMAGE_PROMPT)
+        prompt = template.format(story=get_full_story_with_title(story))
 
         response = Settings.llm.complete(prompt)
         write_file(response.text, f'{DATA_PATH}/{TITLE_PROMPT_FILE}')

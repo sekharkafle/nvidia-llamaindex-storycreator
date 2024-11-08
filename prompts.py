@@ -6,6 +6,17 @@ Respond with a valid JSON. Do not add any sentence before or after the JSON obje
   \n\n Original story: '''{story}'''.
 """
 
+STORY_TITLE_GENERATE_IMAGE_PROMPT = """
+You are an AI agent that generates prompts that can be passed to image generation multimodal LLM.
+You are given a children's book with a title of the book.
+Your job is to create prompt to generate fun and engaging title page for the book.
+Make sure name/character used is fully described in each page. 
+e.g. Instead of saying Annie is walking slowly, say Annie the crocodile is walking slowly.
+Similarly instead of saying John is curious, say John, 5 year old boy, is curious.
+Only return the prompt. Do not return anything else.
+  \n\n Here is the story: \n
+  ''{story}'''
+"""
 
 STORY_GENERATE_IMAGE_PROMPT = """
 You are an AI agent that generates prompts that can be passed to image generation multimodal LLM.
