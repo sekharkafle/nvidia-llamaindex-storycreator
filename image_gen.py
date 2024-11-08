@@ -9,7 +9,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
 
 from PIL import Image
-import fitz
+import pymupdf
 
 def generate_image(prompt:str, key:str):
     """Generates image using StabilityAI diffusion model available as NVidia NIM API.
@@ -178,7 +178,7 @@ def pdf_to_image(pdf_path, output_folder):
         pdf_path: location of the pdf file
         output_folder: location of output images
     """
-    doc = fitz.open(pdf_path)
+    doc = pymupdf.open(pdf_path)
     for page in doc:
         p = doc.load_page(page.number)
         pix = p.get_pixmap()

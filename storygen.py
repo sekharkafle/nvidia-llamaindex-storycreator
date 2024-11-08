@@ -35,7 +35,7 @@ from utils import (write_file, read_file, has_file, save_url_data, read_story_js
 
 from events import (StoryEvent, ChildrenStoryEvent, PromptEvent, PDFEvent, RawStoryEvent, StorySummaryEvent, BookImageEvent, AudioEvent)
 from models import (ChildrenStory, ChildrenStoryPrompt)
-from prompts import STORY_JSON_PROMPT, STORY_GENERATE_IMAGE_PROMPT, SAFE_STORY_PROMPT, EXTRACT_SUMMARIZE_STORY_PROMPT
+from prompts import STORY_JSON_PROMPT, STORY_GENERATE_IMAGE_PROMPT, SAFE_STORY_PROMPT, EXTRACT_SUMMARIZE_STORY_PROMPT, STORY_TITLE_GENERATE_IMAGE_PROMPT
 
 
 MODEL_NAME = 'meta/llama3-70b-instruct'
@@ -58,6 +58,9 @@ class ChildrenStoryGenerationWorkflow(Workflow):
     #can have shortcut to descendant step if results were previously persisted
     @step
     async def read_story(self, ev: StartEvent) -> ChildrenStoryEvent|PromptEvent|PDFEvent|RawStoryEvent|BookImageEvent|StopEvent:
+        #TO-DO: PDF support
+        if hasattr(ev, 'pdf'):
+            return StopEvent(result="PDF support is not available yet!")
         if len(ev.url) > 0: 
             save_url_data(ev.url, f'{DATA_PATH}/{RAW_STORY_FILE}')
             return RawStoryEvent(path=f'{DATA_PATH}/{RAW_STORY_FILE}')
@@ -117,8 +120,8 @@ class ChildrenStoryGenerationWorkflow(Workflow):
     @step #(retry_policy=ConstantDelayRetryPolicy(delay=5, maximum_attempts=20))
     async def generate_prompt(self, ev: ChildrenStoryEvent) -> PromptEvent|StopEvent:
         story = ev.story
-        template = PromptTemplate(STORY_GENERATE_IMAGE_PROMPT)
-        prompt = template.format(page = " title ", story=get_full_story_with_title(story))
+        template = PromptTemplate(STORY_TITLE_GENERATE_IMAGE_PROMPT)
+        prompt = template.format(story=get_full_story_with_title(story))
 
         response = Settings.llm.complete(prompt)
         write_file(response.text, f'{DATA_PATH}/{TITLE_PROMPT_FILE}')
