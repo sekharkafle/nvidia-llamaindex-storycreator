@@ -7,7 +7,6 @@ nemoguardrails
 langchain-nvidia-ai-endpoints==0.2.2
 python-dotenv
 reportlab
-fitz
 PyMuPDF
 moviepy
 gtts
