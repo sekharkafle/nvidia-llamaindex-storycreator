@@ -35,7 +35,7 @@ from utils import (write_file, read_file, has_file, save_url_data, read_story_js
 
 from events import (StoryEvent, ChildrenStoryEvent, PromptEvent, PDFEvent, RawStoryEvent, StorySummaryEvent, BookImageEvent, AudioEvent)
 from models import (ChildrenStory, ChildrenStoryPrompt)
-from prompts import STORY_JSON_PROMPT, STORY_GENERATE_IMAGE_PROMPT, SAFE_STORY_PROMPT, EXTRACT_SUMMARIZE_STORY_PROMPT
+from prompts import STORY_JSON_PROMPT, STORY_GENERATE_IMAGE_PROMPT, SAFE_STORY_PROMPT, EXTRACT_SUMMARIZE_STORY_PROMPT, STORY_TITLE_GENERATE_IMAGE_PROMPT
 
 
 MODEL_NAME = 'meta/llama3-70b-instruct'
