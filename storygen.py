@@ -58,6 +58,9 @@ class ChildrenStoryGenerationWorkflow(Workflow):
     #can have shortcut to descendant step if results were previously persisted
     @step
     async def read_story(self, ev: StartEvent) -> ChildrenStoryEvent|PromptEvent|PDFEvent|RawStoryEvent|BookImageEvent|StopEvent:
+        #TO-DO: PDF support
+        if hasattr(ev, 'pdf'):
+            return StopEvent(result="PDF support is not available yet!")
         if len(ev.url) > 0: 
             save_url_data(ev.url, f'{DATA_PATH}/{RAW_STORY_FILE}')
             return RawStoryEvent(path=f'{DATA_PATH}/{RAW_STORY_FILE}')

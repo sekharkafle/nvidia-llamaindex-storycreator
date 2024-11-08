@@ -12,7 +12,7 @@ def write_file(content:str, file:str):
         content: Text content for the file
         file: file name
     """
-    with open(file, "w") as outfile:
+    with open(file, "w", encoding="utf-8") as outfile:
         outfile.write(content)
 
 def read_file(file:str):
