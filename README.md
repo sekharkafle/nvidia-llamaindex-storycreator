@@ -48,4 +48,7 @@ The output file will be at ./data/story.pdf .
 ## Technology 
 
 ## TODO 
-
+- Add steps to get Human-in-the-loop feedback to improve model generated image and/or text output.  
+- Add debug logs to help troubleshoot issues.
+- Generate dynamic video segments rather than using static images.
+- Generate better audio using more advanced TTS service. 
