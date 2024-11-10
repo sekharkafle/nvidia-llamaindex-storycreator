@@ -48,7 +48,7 @@ The output file will be at ./data/story.pdf .
 #### LlamaIndex
 LamaIndex is used as a framework to build the application. Workflow in LlamaIndex facilitated chaining together various steps needed to generate a story book. Below diagram illustrates workflow steps and corresponding events chained in a sequence.
 ![StoryBook Workflow](workflow.png)
-#### NVIDIA NIM API
+#### NVIDIA NIM MicroServices
 NVIDIA hosted NIM API was used to accelerate the development by accessing readily available inference endpoints of GenAI models. NIM API is used in below steps of the workflow:    
 
 <strong>summarize_story</strong> - Creates a summary of the user provided story or the text content. Meta's llama3-70b-instruct model is used for this purpose. Additionally, NVIDIA's NV-Embed-QA model is used for vector embedding generation. 
